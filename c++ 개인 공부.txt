@@ -1,0 +1,9 @@
+#include <iostream> <<c++ 헤더 함수파일 
+std::cin >> 변수명; //입력 //scanf 
+std::cout << 출력내용(혹은 변수이름) << std::endl; <<출력  다끝났을때 
+cout<<출력내용;
+using namespace std; 를 사용하면 std::은 스킵가능하다 
+endl;은 return 0;이 아니고 마무리되는 프로그램의버퍼를 지워주는것 +\n
+\n과 endl;은 용도 차이 가볍고빠른 처리엔 \n 느리지만 버퍼를 초기화해줘야되는것엔 endl; 
+
+std::string str;
