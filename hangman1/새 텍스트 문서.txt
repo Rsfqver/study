@@ -1,0 +1,357 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <ctime>
+#include <cstdlib>
+using namespace std;
+
+class HangMan
+{
+    ifstream fin; // 파일 열기 위한 변수 지정 
+    vector<string> v;
+    char tmp[2];  // 보이게 할 글자
+    int tmpNum[2]; // 보이게 할 글자의 인덱스
+public:
+    HangMan();
+    void fileRead(vector<string>& v, ifstream& fin); // 파일 읽는 구성부 
+    string maketext(); // 텍스트 생성 // 문제 구성부 
+    string Answer(string text); // 문제 답변 
+    void run(); // 실행파일 exe
+    ~HangMan(); // 소멸자 
+};
+
+HangMan::HangMan()
+{
+    const char* file = "words.txt";
+    fin.open(file);
+    if (!fin)
+    {
+        cout << file << " 파일 열기에 실패" << endl;
+        exit(1);
+    }
+}
+
+void HangMan::fileRead(vector<string>& v, ifstream& fin)
+{
+    string line;
+    while (getline(fin, line))
+    {
+        if (!line.empty()) // 빈 줄 무시
+            v.push_back(line);
+    }
+
+    if (v.empty())
+    {
+        cout << "파일이 비어 있습니다." << endl;
+        exit(1);
+    }
+}
+
+string HangMan::maketext()
+{
+    int n = rand() % v.size();
+    string text = v.at(n);
+    int i = 0;
+
+    // 랜덤으로 2개의 글자를 선택하여 tmp에 저장
+    while (i < 2)
+    {
+        int num = rand() % text.size();
+        bool duplicate = false;
+
+        // 중복 검사
+        for (int j = 0; j < i; j++)
+        {
+            if (tmpNum[j] == num)
+            {
+                duplicate = true;
+                break;
+            }
+        }
+
+        // 중복이 아닐 경우 tmpNum과 tmp에 저장
+        if (!duplicate)
+        {
+            tmpNum[i] = num;
+            tmp[i] = text[num];
+            text[num] = '-';
+            i++;
+        }
+    }
+    
+    // 동일한 글자가 있는 경우 추가로 표시
+    for (int i = 0; i < text.size(); i++)
+    {
+        if (text[i] == tmp[0] || text[i] == tmp[1])
+        {
+            text[i] = '-'; // 같은 글자도 '-'로 표시
+        }
+    }
+
+    return text;
+}
+
+string HangMan::Answer(string text) // 게임 답변
+{
+    int scount = 0; // 맞춘 개수
+    int fcount = 0; // 틀린 개수
+    char user;
+
+    while (true)
+    {
+        cout << ">> ";
+        cin >> user;
+
+        bool found = false;
+        for (int i = 0; i < 2; i++)
+        {
+            if (user == tmp[i])
+            {
+                found = true;
+                // 선택된 글자를 모두 반영
+                for (int j = 0; j < text.size(); j++)
+                {
+                    if (text[j] == '-') // 원래 글자로 복구
+                    {
+                        text[j] = tmp[i];
+                    }
+                }
+                cout << text << endl;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            fcount++;
+            cout << "틀렸습니다. 남은 기회: " << 5 - fcount << endl;
+        }
+
+        if (fcount == 5)
+        {
+            cout << "5번 실패로 게임이 종료됩니다." << endl;
+            exit(0);
+        }
+
+        // 두 글자가 모두 맞힌 경우
+        if (text.find('-') == string::npos)
+        {
+            return "정답";
+        }
+    }
+}
+
+HangMan::~HangMan()
+{
+    if (fin.is_open())
+        fin.close();
+}
+
+void HangMan::run()
+{
+    cout << "---------------------" << endl;
+    cout << "게임을 시작합니다" << endl;
+    cout << "---------------------" << endl;
+    fileRead(v, fin);
+    
+    while (true)
+    {
+        string text = maketext();
+        cout << text << endl;
+        cout << Answer(text) << endl;
+
+        char go;
+        cout << "Next(y/n)? ";
+        cin >> go;
+        if (go == 'n') exit(0);
+    }
+}
+
+int main()
+{
+    srand(static_cast<unsigned>(time(NULL))); // 시드 초기화
+    HangMan a;
+    a.run();
+}
+
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+
+class HangMan
+{
+    ifstream fin; // 파일 열기 위한 변수 지정 
+    vector<string> v;
+    char tmp[2];  // 보이게 할 글자
+    int tmpNum[2]; // 보이게 할 글자의 인덱스
+public:
+    HangMan();
+    void fileRead(); // 파일 읽는 구성부 
+    string maketext(); // 텍스트 생성 // 문제 구성부 
+    string Answer(string text); // 문제 답변 
+    void run(); // 실행파일 exe
+    ~HangMan(); // 소멸자 
+};
+
+HangMan::HangMan()
+{
+    const char* file = "words.txt";
+    fin.open("words.txt");
+    if (!fin) // 파일 열기 실패 조건 수정
+    {
+        cout << file << " 파일 열기에 실패" << endl;
+        exit(1);
+    }
+}
+
+void HangMan::fileRead()
+{
+    string line;
+    while (getline(fin, line))
+    {
+        if (!line.empty()) // 빈 줄 무시
+            v.push_back(line);
+    }
+}
+
+string HangMan::maketext()
+{
+    srand((unsigned)time(NULL)); // 시드 초기화
+    int n = rand() % v.size(); // 벡터 크기로 수정
+    string text = v.at(n);
+
+    // 글자 수가 2개 이상인지 확인
+    if (text.size() < 2)
+    {
+        cout << "단어가 너무 짧습니다." << endl;
+        exit(1);
+    }
+
+    // 2개의 랜덤 인덱스를 선택
+    int i = 0;
+    while (i < 2)
+    {
+        int index = rand() % text.size();
+        bool isDuplicate = false;
+
+        // 중복 인덱스 체크
+        for (int j = 0; j < i; j++)
+        {
+            if (tmpNum[j] == index)
+            {
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if (!isDuplicate) // 중복되지 않으면 선택
+        {
+            tmpNum[i] = index;
+            tmp[i] = text[index];
+            text[index] = '-'; // 글자를 '-'로 변경
+            i++;
+        }
+    }
+
+    // '-'로 변경된 나머지 글자들은 그대로 두고, 나머지는 '-'로 바꾸기
+    for (size_t j = 0; j < text.size(); j++)
+    {
+        if (text[j] != '-') // 이미 '-'로 표시된 글자는 건너뜁니다.
+            text[j] = '-';
+    }
+
+    // 선택한 글자들만 보여줍니다.
+    text[tmpNum[0]] = tmp[0];
+    text[tmpNum[1]] = tmp[1];
+
+    return text;
+}
+
+string HangMan::Answer(string text) // 게임 답변
+{
+    int scount = 0; // 맞춘 개수
+    int fcount = 0; // 틀린 개수
+    char user;
+
+    while (true)
+    {
+        cout << ">> ";
+        cin >> user;
+
+        bool found = false; // 글자가 발견되었는지 여부
+        for (int i = 0; i < 2; i++)
+        {
+            if (user == tmp[i])
+            {
+                found = true;
+                text[tmpNum[i]] = user; // 원래 글자로 복원
+                cout << text << endl;
+                scount++;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            fcount++;
+            cout << "틀렸습니다. 남은 기회: " << 5 - fcount << endl;
+        }
+
+        if (fcount == 5)
+        {
+            cout << "5번 실패로 게임이 종료됩니다." << endl;
+            text[tmpNum[0]] = tmp[0]; // 원래 글자로 복원
+            text[tmpNum[1]] = tmp[1];
+            return text;
+        }
+        if (scount == 2)
+        {
+            return "정답";
+        }
+    }
+}
+
+HangMan::~HangMan()
+{
+    fin.close(); // 소멸자에서 파일 닫기
+}
+
+void HangMan::run()
+{
+    cout << "---------------------" << endl;
+    cout << "게임을 시작합니다" << endl;
+    cout << "---------------------" << endl;
+    fileRead();
+    while (true)
+    {
+        string text = maketext();
+        char go;
+        cout << text << endl;
+        cout << Answer(text) << endl;
+
+        while (true)
+        {
+            cout << "Next(y/n)? ";
+            cin >> go;
+            if (go == 'y') break;
+            else if (go == 'n') exit(0);
+            else
+            {
+                cout << "잘못 입력하셨습니다. 다시 입력하세요." << endl;
+            }
+        }
+    }
+}
+
+int main()
+{
+    HangMan a;
+    a.run();
+}
