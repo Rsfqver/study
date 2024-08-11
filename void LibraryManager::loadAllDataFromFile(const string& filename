@@ -1,0 +1,54 @@
+void LibraryManager::loadAllDataFromFile(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Failed to open file: " << filename << endl;
+        return;
+    }
+
+    string section;
+    while (getline(file, section)) {
+        if (section == "[Members]") {
+            string line;
+            while (getline(file, line) && line != "[Books]") {
+                stringstream ss(line);
+                string username, password, name, email, borrowedBooks;
+
+                getline(ss, username, ',');
+                getline(ss, password, ',');
+                getline(ss, name, ',');
+                getline(ss, email, ',');
+                getline(ss, borrowedBooks);
+
+                LibraryMember member(username, password, name, email);
+                stringstream booksStream(borrowedBooks);
+                string book;
+                while (getline(booksStream, book, '|')) {
+                    member.borrowBook(book);
+                }
+                members.push_back(member);
+            }
+        }
+
+        if (section == "[Books]") {
+            string line;
+            while (getline(file, line)) {
+                stringstream ss(line);
+                string title, author, isBorrowedStr;
+
+                getline(ss, title, ',');
+                getline(ss, author, ',');
+                getline(ss, isBorrowedStr, ',');
+              // 추가된 로그
+
+                LibraryBook book(title, author);
+                if (isBorrowedStr == "1") {
+                    book.borrowBook();
+                }
+                books.push_back(book);  // 기존 데이터에 추가
+                cout << "Loaded book: " << book.getTitle() << " by " << book.getAuthor() << endl;  // 추가된 로그
+            }
+        }
+    }
+
+    file.close();
+}
