@@ -1,0 +1,122 @@
+title::유닉스/리눅스
+
+이2개는 사용환경자체가 네트워크다  커널-> 쉘(인터페이스)-> 유저 커널<-쉘(인터페이스)<-유저 메모리 시피유
+
+=====================================================
+1.c
+2.c--> device programing 	
+-arm: STM32F103(M3/M4)
+3. linux env (PC)
+	->개발 환경
+		->commands
+	-> 실행 환경 
+4.kernel porting (YOCTO)-REAPBERRY PI.
+
+5. device driver
+6. ststem programing
+	"system call"
+	어플
+	네트워크 프로그래밍 
+	
+	c: ping 192.168.56.101
+	c: ssh iam@192.168.56.101//다그는법 ssh iam@192.168.56.101
+	
+	1. ssh(yes)
+	
+	커널 역할:자원 관리 
+	하드웨어의 운영 관리
+	프로세스 관리,파일관리,메모리 관리,통신관리,주변장치 관리 
+	
+	pwd: print working directory 1
+	
+	' '//문자열로받는다 
+	
+	~$ uname --help
+	
+	cat /etc/issue-정보 확인 
+	
+	mkdir 디렉토리 생성 
+	ls-F 슬레쉬로 폴더 확인 
+	..//상위 디렉토리 ./현재 디렉토리
+	-whatis ls //명령어 설명 
+	//rm 디렉토리 제거 rmdir 
+	ctal+c종료 컨트롤디 강제탈출 
+	cp//복사
+	ln//링크(유희왕아님) 
+	hexdump //
+	head //위에만 부분 출력 tail //밑의부분만 출력 
+	1. hard link
+	ln을 하여 강하게 링크생성 파일에만 거렁짐
+	2. soft link(soft링크라고 했지만 정확히는 symblick 링크라고함_)
+	ln-s 약하게 링크  파일에도 걸고 폴더에도 넣을수있음 
+	~:홈 디렉토리 .:현재  ..:과거
+	find:파일을 찾는 명령어
+	grap
+	 sudo  poweroff//끄기 
+	시프트: 터미널 vi 명령어 모드 
+	컨트롤 d 저장하고 종료 
+	컨트롤c는 강제 탈출 종료
+	명령어 >명령어 선언 으로 이 선언에 기존 명령어의 기능은 넣어줄수도있다.
+
+	() 프로세스 모음으로 입력 
+	()& 좌표출력 프로세스 
+	==============================루트 파일 시스템============================================
+	
+	-	:normal file
+	d 	:dirs
+	c 	:character device file
+	b	:block		device file
+	l 	:symblick 	device	file
+	s 	: socket	file //네트워크 통신 
+	p 	:	pipe	file 
+	================================aptitude==================
+	aptitude
+	apt-get
+	apt-cache
+	apt-get update
+	apt-get install
+	apt-get install tree
+	
+	
+	
+	
+	========================
+	iam@boy:~$ cp -a dir2 dir3
+iam@boy:~$ tree
+.
+├── a
+├── al
+├── as -> a
+├── b
+├── bc
+├── c
+├── dir1
+│   └── b
+├── dir2
+│   └── b
+├── dir3
+│   └── b
+└── pac
+
+3 directories, 10 files
+iam@boy:~$ rmdir dri3
+rmdir: failed to remove 'dri3': No such file or directory
+iam@boy:~$ rmdir dir3
+rmdir: failed to remove 'dir3': Directory not empty
+iam@boy:~$ rmdir dir3
+rmdir: failed to remove 'dir3': Directory not empty
+iam@boy:~$ ls
+a  al  as  b  bc  c  dir1  dir2  dir3  pac
+iam@boy:~$ rm -rf dir3
+iam@boy:~$ ls
+a  al  as  b  bc  c  dir1  dir2  pac
+iam@boy:~$
+
+852p, 56p,248p,
+
+사용자 정의 슬롯 시그널 프로그래머스 바 
+코드채우기 나올확률있음 
+
+40문제?
+1과목 c c++ qt 리눅스 10문제 
+단답이3 객관식7 
